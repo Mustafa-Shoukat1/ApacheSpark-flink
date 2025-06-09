@@ -4,8 +4,6 @@
 
 [![Apache Spark](https://img.shields.io/badge/Apache%20Spark-E25A1C?style=for-the-badge&logo=apache-spark&logoColor=white)](https://spark.apache.org/)
 [![Apache Flink](https://img.shields.io/badge/Apache%20Flink-E6526F?style=for-the-badge&logo=apache-flink&logoColor=white)](https://flink.apache.org/)
-[![GitHub Stars](https://img.shields.io/github/stars/Mustafa-Shoukat1/ApacheSpark-flink?style=for-the-badge&logo=github)](https://github.com/Mustafa-Shoukat1/ApacheSpark-flink)
-[![License](https://img.shields.io/github/license/Mustafa-Shoukat1/ApacheSpark-flink?style=for-the-badge)](LICENSE)
 
 </div>
 
