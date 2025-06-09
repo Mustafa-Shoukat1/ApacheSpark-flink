@@ -47,9 +47,19 @@ Apache Flink is a framework and distributed processing engine for stateful compu
 Both are powerful tools for big data processing and analytics.
 Spark excels at batch processing while Flink is optimized for stream processing.
 Together they provide comprehensive data processing capabilities.
+Data engineering is crucial for modern analytics pipelines.
+Real-time processing enables immediate insights from streaming data.
+Machine learning models require clean and processed data.
+Distributed computing frameworks handle large-scale data processing.
+Big data technologies enable processing of massive datasets.
 EOF
 
+    # Wait for Kafka to be ready
+    log "Waiting for Kafka to be ready..."
+    timeout 60 bash -c 'until docker-compose exec kafka kafka-topics --list --bootstrap-server localhost:9092 > /dev/null 2>&1; do sleep 2; done'
+
     # Create sample events for Kafka
+    log "Creating Kafka topics..."
     docker-compose exec -T kafka kafka-topics --create \
         --topic user-events \
         --bootstrap-server localhost:9092 \
@@ -62,12 +72,31 @@ EOF
         --partitions 3 \
         --replication-factor 1 || true
 
+    docker-compose exec -T kafka kafka-topics --create \
+        --topic event-counts \
+        --bootstrap-server localhost:9092 \
+        --partitions 3 \
+        --replication-factor 1 || true
+
+    docker-compose exec -T kafka kafka-topics --create \
+        --topic user-activity \
+        --bootstrap-server localhost:9092 \
+        --partitions 3 \
+        --replication-factor 1 || true
+
     # Send sample events to Kafka
+    log "Sending sample events to Kafka..."
     for i in {1..10}; do
-        echo "{\"user_id\":\"user_$i\",\"event_type\":\"page_view\",\"timestamp\":$(date +%s)000,\"page\":\"/home\"}" | \
+        event_types=("page_view" "click" "purchase" "cart_add" "checkout")
+        pages=("/home" "/products" "/cart" "/checkout" "/profile")
+        event_type=${event_types[$((RANDOM % ${#event_types[@]}))]}
+        page=${pages[$((RANDOM % ${#pages[@]}))]}
+        
+        echo "{\"user_id\":\"user_$i\",\"event_type\":\"$event_type\",\"timestamp\":$(date +%s)000,\"page\":\"$page\"}" | \
         docker-compose exec -T kafka kafka-console-producer \
             --topic user-events \
-            --bootstrap-server localhost:9092
+            --bootstrap-server localhost:9092 \
+            --property parse.key=false > /dev/null 2>&1
     done
 
     log "Sample data created ✓"
