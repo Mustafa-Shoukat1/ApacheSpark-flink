@@ -1,0 +1,91 @@
+{
+  "dashboard": {
+    "id": null,
+    "title": "Apache Spark Monitoring",
+    "tags": ["spark", "streaming", "batch"],
+    "timezone": "browser",
+    "refresh": "5s",
+    "time": {
+      "from": "now-1h",
+      "to": "now"
+    },
+    "panels": [
+      {
+        "id": 1,
+        "title": "Spark Applications",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "spark_applications_total",
+            "legendFormat": "Active Applications"
+          }
+        ],
+        "gridPos": {
+          "h": 6,
+          "w": 6,
+          "x": 0,
+          "y": 0
+        }
+      },
+      {
+        "id": 2,
+        "title": "Spark Executors",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "spark_executors_total",
+            "legendFormat": "Active Executors"
+          }
+        ],
+        "gridPos": {
+          "h": 6,
+          "w": 6,
+          "x": 6,
+          "y": 0
+        }
+      },
+      {
+        "id": 3,
+        "title": "Memory Usage",
+        "type": "timeseries",
+        "targets": [
+          {
+            "expr": "spark_memory_used_bytes",
+            "legendFormat": "Memory Used"
+          },
+          {
+            "expr": "spark_memory_total_bytes",
+            "legendFormat": "Memory Total"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 6
+        }
+      },
+      {
+        "id": 4,
+        "title": "Task Metrics",
+        "type": "timeseries",
+        "targets": [
+          {
+            "expr": "rate(spark_tasks_completed_total[5m])",
+            "legendFormat": "Tasks Completed/sec"
+          },
+          {
+            "expr": "rate(spark_tasks_failed_total[5m])",
+            "legendFormat": "Tasks Failed/sec"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 6
+        }
+      }
+    ]
+  }
+}

@@ -106,25 +106,34 @@ EOF
 run_spark_batch() {
     log "Running Spark batch processing example..."
     
+    # Run word count example
+    docker-compose exec spark-master spark-submit \
+        --master spark://spark-master:7077 \
+        --deploy-mode client \
+        /opt/spark-apps/src/batch-processing/main.py
+    
+    # Also run built-in SparkPi example for verification
     docker-compose exec spark-master spark-submit \
         --master spark://spark-master:7077 \
         --deploy-mode client \
         --class org.apache.spark.examples.SparkPi \
         /opt/spark/examples/jars/spark-examples_2.12-3.5.0.jar 10
     
-    log "Spark batch job completed ✓"
+    log "Spark batch jobs completed ✓"
 }
 
 # Run Spark streaming example
 run_spark_streaming() {
     log "Running Spark streaming example..."
     
-    docker-compose exec spark-master spark-submit \
+    # Start the streaming job in background
+    docker-compose exec -d spark-master spark-submit \
         --master spark://spark-master:7077 \
         --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.0 \
         /opt/spark-apps/src/streaming/kafka_stream_processor.py
     
     log "Spark streaming job started ✓"
+    log "Monitor progress at: http://localhost:4040"
 }
 
 # Run Flink streaming example
@@ -141,12 +150,19 @@ run_flink_streaming() {
 run_ml_pipeline() {
     log "Running ML pipeline example..."
     
+    # Run recommendation engine
     docker-compose exec spark-master spark-submit \
         --master spark://spark-master:7077 \
         --packages org.apache.spark:spark-mllib_2.12:3.5.0 \
         /opt/spark-apps/src/ml-pipelines/recommendation_engine.py
     
-    log "ML pipeline completed ✓"
+    # Run classification pipeline
+    docker-compose exec spark-master spark-submit \
+        --master spark://spark-master:7077 \
+        --packages org.apache.spark:spark-mllib_2.12:3.5.0 \
+        /opt/spark-apps/src/ml-pipelines/classification_pipeline.py
+    
+    log "ML pipelines completed ✓"
 }
 
 # Monitor jobs
