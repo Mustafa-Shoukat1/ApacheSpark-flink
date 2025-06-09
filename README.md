@@ -17,6 +17,9 @@
 
 </div>
 
+![diagram (3)](https://github.com/user-attachments/assets/a8fe6952-b704-4f11-8cf1-346c55ddee68)
+
+
 > **Enterprise-grade Apache Spark & Flink data engineering platform with production-ready examples, CI/CD pipelines, monitoring, and best practices for building scalable data processing systems.**
 
 ---
